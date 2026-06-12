@@ -9,7 +9,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc && rsync -av --exclude 'node_modules' custom dist/"
+    "build": "tsc"
   },
   "keywords": [
     "adminforth",
