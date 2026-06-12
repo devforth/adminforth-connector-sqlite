@@ -24,6 +24,7 @@
   "license": "MIT",
   "description": "AI agent plugin for AdminForth with tool-based workflows and persistent chat sessions",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
     "@types/node": "latest",
     "semantic-release": "^24.2.1",
     "semantic-release-slack-bot": "^4.0.2",
