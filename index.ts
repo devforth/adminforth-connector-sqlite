@@ -3,7 +3,7 @@ import { IAdminForthDataSourceConnector, IAdminForthSingleFilter, IAdminForthAnd
 import { IAdminForthSort } from 'adminforth';
 import dayjs from 'dayjs';
 import { AdminForthDataTypes,  AdminForthFilterOperators, AdminForthSortDirections } from 'adminforth';
-import { dbLogger, afLogger } from 'adminforth';
+import { dbLogger, afLogger, checkIfFieldIsInsideResourceColumns } from 'adminforth';
 
 type AnyRow = Record<string, any>;
 
@@ -459,6 +459,10 @@ class SQLiteConnector extends AdminForthBaseConnector implements IAdminForthData
       const where = this.whereClause(filters);
 
       const filterValues = this.getFilterParams(filters);
+
+      if (sort.some(s => !checkIfFieldIsInsideResourceColumns(s.field, resource))) {
+        throw new Error(`Invalid sort field: ${sort.find(s => !checkIfFieldIsInsideResourceColumns(s.field, resource))?.field}`);
+      }
 
       const orderBy = sort.length ? `ORDER BY ${sort.map((s: IAdminForthSort) => `${s.field} ${this.SortDirectionsMap[s.direction]}`).join(', ')}` : '';
       
