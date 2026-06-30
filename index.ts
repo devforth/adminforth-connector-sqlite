@@ -53,7 +53,18 @@ class SQLiteConnector extends AdminForthBaseConnector implements IAdminForthData
       sampleValue: sampleRow[col.name],
     }));
   }
-  
+
+  async isDatabaseEmpty(): Promise<boolean> {
+    const stmt = this.client.prepare(`
+      SELECT name
+      FROM sqlite_schema
+      WHERE type = 'table'
+        AND name NOT LIKE 'sqlite_%'
+      LIMIT 1
+    `);
+    return !stmt.get();
+  }
+
     async hasSQLiteCascadeFk(resource: AdminForthResource, config: AdminForthConfig): Promise<boolean> {
       const cascadeColumn: any = resource.columns?.find(c => c.foreignResource?.onDelete === 'cascade');
       if (!cascadeColumn) return false;
@@ -553,8 +564,8 @@ class SQLiteConnector extends AdminForthBaseConnector implements IAdminForthData
       return res.changes ?? 0;
     }
 
-    close() {
-      this.client.close();
+    async close(): Promise<void> {
+      this.client?.close();
     }
 }
 
