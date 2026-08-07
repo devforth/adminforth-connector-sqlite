@@ -531,6 +531,13 @@ class SQLiteConnector extends AdminForthBaseConnector implements IAdminForthData
     async createRecordOriginalValues({ resource, record }: { resource: AdminForthResource, record: any }): Promise<string> {
       const tableName = resource.table;
       const columns = Object.keys(record);
+
+      const knownColumns = new Set(resource.dataSourceColumns.map((col: AdminForthResourceColumn) => col.name));
+      const unknownColumn = columns.find((colName) => !knownColumns.has(colName));
+      if (unknownColumn) {
+        throw new Error(`Invalid column name: ${unknownColumn}`);
+      }
+
       const placeholders = columns.map(() => '?').join(', ');
       const values = columns.map((colName) => record[colName]);
       const sql = `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES (${placeholders})`;
