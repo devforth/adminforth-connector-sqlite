@@ -4,6 +4,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "homepage": "https://adminforth.dev/docs/tutorial/Plugins/connector-sqlite/",
   "publishConfig": {
     "access": "public"
@@ -32,7 +35,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "better-sqlite3": "^11.10.0",
+    "better-sqlite3": "^13.0.3",
     "dayjs": "^1.11.21"
   },
   "release": {
